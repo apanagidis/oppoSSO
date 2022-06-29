@@ -100,7 +100,7 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
           </Box>
           {supervisorDepartment === 'internal' && hasManyCompanies ? (
             <Box marginTop="space80">
-              <Label htmlFor="departmentName">From which company does this person belong?</Label>
+              <Label htmlFor="departmentName">From which country does this person belong?</Label>
               <Select id="departmentName" onChange={onChangeDepartment}>
                 <Option value="internal">Internal employee</Option>
                 {Object.entries(companies).map(([id, name]) => {
