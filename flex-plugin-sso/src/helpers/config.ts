@@ -2,6 +2,10 @@ interface Companies {
   [key: string]: string;
 }
 
+interface SiteCompanies {
+  [key: string]: any;
+}
+
 // If you dont have the concept of multiple BPOs or multiple companies managing your contact-center,
 // just delete the entries below, leaving an empty object like "companies = {}", this will
 // hide some UI elements related to the "Company", as you dont need.
@@ -71,7 +75,7 @@ export const companies: Companies = {
   'Slovakia':'Slovakia'  
 };
 
-export const SitesCompanies ={
+export const sitesCompanies: SiteCompanies ={
   "Malaysia": 
    [
    "Malaysia",
@@ -84,10 +88,67 @@ export const SitesCompanies ={
    "Nepal",
    "Sri Lanka"
    ],
-   
-
-
- 
+   "Spain":["Spain","Portugal"],
+   "Turkey":
+   ["Turkey",
+   "Ukraine",
+   "Kazakhstan",
+   "Uzbekistan"],
+   "Slovakia":["Slovakia","Czech Republic","Hungary"],
+   "Romania":
+   [
+   "Romania",
+   "Moldova",
+   "Poland",
+   "United Kingdom",
+   "Ireland",
+   "Luxemburg",
+   "Belgium",
+   "Netherlands",
+   ],
+   "Egypt":[
+    "United Arab Emirates",
+    "Oman",
+    "Bahrain",
+    "Qatar",
+    "Kuwait",
+    "Saudi Arabia",
+    "Jordan",
+    "Iraq",
+    "Lebanon",
+    "Palestine",
+    "Syria",
+    "Egypt",
+    "Tunisia",
+    "South Africa",
+    "Nigeria"
+   ],
+   "Mexico":
+   [
+    "Mexico",
+    "Columbia",
+    "Peru",
+    "Chile",
+    "Costa Rica",
+    "Honduras"
+   ],
+   "Indonesia":["Indonesia"],
+   "Japan":["Japan"],
+   "Taiwan":["Taiwan"],
+   "Thailand":["Thailand"],
+   "Vietnam":["Vietnam"],
+   "Cambodia":["Cambodia"],
+   "Bengal":["Bengal"],
+   "Myanmar":["Myanmar"],
+   "Pakistan":["Pakistan"],
+   "Kenya":["Kenya"],
+    "Morocco":["Morocco"],
+    "Algeria ":["Algeria "],
+    "Germany":["Germany"],
+    "France":["France"],
+    "Switzerland":["Switzerland"],
+    "Italy":["Italy"],
+    "Russia":["Russia"]
 
 }
 

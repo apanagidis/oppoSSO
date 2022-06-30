@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { companies, hasManyCompanies } from './config';
+import { companies, sitesCompanies, hasManyCompanies } from './config';
 
 export const getCompanyName = (id: string) => {
   if (id === 'internal') {
@@ -11,6 +11,19 @@ export const getCompanyName = (id: string) => {
   }
 
   return '';
+};
+
+export const getSiteLocation = (id: string) => {
+  let found;
+  const keys = Object.keys(sitesCompanies);
+  keys.forEach(key => {
+      let temp = sitesCompanies[key].find((element: string)=> {return element===id})
+      if(temp){
+          found = key;
+      }      
+  });    
+  return found ? found : ''
+
 };
 
 export const isWorkerInternal = (flex: typeof Flex, manager: Flex.Manager) => {
