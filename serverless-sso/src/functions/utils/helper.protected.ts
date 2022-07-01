@@ -78,6 +78,7 @@ export const myRequire = (file: string) => {
   }
 };
 
+
 export class SyncClass {
   constructor(private twilioClient: TwilioInterface, private serviceSid: string, private syncListSid?: string) {}
 
@@ -130,7 +131,7 @@ export class SyncClass {
     });
   }
 
-  // user format: `user-${phoneNumber}`
+  // user format: `user-${email}`
   async getUser(user: string): Promise<User> {
     try {
       const {
@@ -142,7 +143,7 @@ export class SyncClass {
       return { name, department, role, canAddAgents };
     } catch (e) {
       if (e.status === 404) {
-        throw new Error('Agent not found using this phone number.');
+        throw new Error('Agent not found using this email.');
       }
       throw e;
     }
@@ -251,6 +252,9 @@ export const ResponseOK = (obj: any, callback: ServerlessCallback) => {
   response.setBody(typeof obj === 'string' ? { obj } : obj);
   callback(null, response);
 };
+
+
+
 
 export const formatNumberToE164 = (_phoneNumber: string) => {
   const re = /^(0{2}|\+)(.+)/;

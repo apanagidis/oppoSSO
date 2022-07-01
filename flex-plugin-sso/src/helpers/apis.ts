@@ -11,7 +11,7 @@ export interface AuditLog {
 export interface Worker {
   name: string;
   department: string;
-  phoneNumber: string;
+  email: string;
   role: string;
   canAddAgents: boolean;
 }
@@ -47,19 +47,19 @@ export const apiListAuditLogs = async () => {
   }
 };
 
-export const apiSaveWorker = async (name: string, phoneNumber: string, role: string, department: string, canAddAgents: boolean) => {
+export const apiSaveWorker = async (name: string, email: string, role: string, department: string, canAddAgents: boolean) => {
   try {
-    await request('/admin/worker-add', { name, phoneNumber, role, department, canAddAgents: +canAddAgents });
+    await request('/admin/worker-add', { name, email, role, department, canAddAgents: +canAddAgents });
     Flex.Notifications.showNotification('ssoOK', { msg: `Agent ${name} was added.` });
   } catch (e: any) {
     Flex.Notifications.showNotification('ssoError', { msg: e.message });
   }
 };
 
-export const apiDeleteWorker = async (phoneNumber: string) => {
+export const apiDeleteWorker = async (email: string) => {
   try {
-    await request('/admin/worker-del', { phoneNumber });
-    Flex.Notifications.showNotification('ssoOK', { msg: `Agent with the phoneNumber number '${phoneNumber}' has been deleted from our system.` });
+    await request('/admin/worker-del', { email });
+    Flex.Notifications.showNotification('ssoOK', { msg: `Agent with the email number '${email}' has been deleted from our system.` });
   } catch (e: any) {
     Flex.Notifications.showNotification('ssoError', { msg: e.message });
   }

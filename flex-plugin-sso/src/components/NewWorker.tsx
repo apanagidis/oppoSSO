@@ -42,14 +42,14 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
   const inputRef = React.useRef() as any;
   const [isLoading, setIsLoading] = React.useState(false);
   const [name, setName] = React.useState('');
-  const [phoneNumber, setPhoneNumber] = React.useState('');
+  const [email, setemail] = React.useState('');
   const [role, setRole] = React.useState('agent');
   const [canAddAgents, setCanAddAgents] = React.useState(false);
   const [isSupervisor, setSupervisor] = React.useState(false);
 
   const onClick = async () => {
     setIsLoading(true);
-    await apiSaveWorker(name, phoneNumber, role, department, canAddAgents);
+    await apiSaveWorker(name, email, role, department, canAddAgents);
     setIsLoading(false);
     refreshTable();
     handleClose();
@@ -87,14 +87,14 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
             />
           </Box>
           <Box marginTop="space80">
-            <Label htmlFor="phoneNumber">Phone Number</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
-              id="phoneNumber"
-              name="phoneNumber"
+              id="email"
+              name="email"
               type="text"
-              placeholder="+49123123123"
+              placeholder="abc@acme.com"
               onChange={(e) => {
-                setPhoneNumber(e.target.value);
+                setemail(e.target.value);
               }}
             />
           </Box>

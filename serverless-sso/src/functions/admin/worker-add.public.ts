@@ -8,7 +8,7 @@ const { ResponseOK, formatNumberToE164, ohNoCatch, SyncClass, isSupervisor } = <
 
 type MyEvent = {
   name: string;
-  phoneNumber: string;
+  email: string;
   role: string;
   canAddAgents: number;
   token: string;
@@ -30,13 +30,12 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     const { SYNC_SERVICE_SID, SYNC_LIST_SID } = context;
     const sync = new SyncClass(twilioClient, SYNC_SERVICE_SID, SYNC_LIST_SID);
 
-    const { name, phoneNumber: notNormalizedMobile, role, department, canAddAgents } = event;
-    const phoneNumber = formatNumberToE164(notNormalizedMobile);
+    const { name, email, role, department, canAddAgents } = event;
 
     const { supervisorName, supervisorDepartment } = await isSupervisor(event, context, sync);
 
-    if (!name || !phoneNumber || !role) {
-      throw new Error("Some fields came empty. Please check in the Network tab of Chrome. I need 'name', 'phoneNumber' and 'role'.");
+    if (!name || !email || !role) {
+      throw new Error("Some fields came empty. Please check in the Network tab of Chrome. I need 'name', 'email' and 'role'.");
     }
 
     if (role !== 'agent' && !role.startsWith('supervisor')) {
@@ -46,10 +45,10 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     // For security reasons, avoiding an Supervisor from BPO elevating his accesses
     const newWorkerDepartment = supervisorDepartment === 'internal' ? department : supervisorDepartment;
 
-    await sync.createDocument(`user-${phoneNumber}`, { name, phoneNumber, role, department: newWorkerDepartment, canAddAgents: !!+canAddAgents });
+    await sync.createDocument(`user-${email}`, { name, email, role, department: newWorkerDepartment, canAddAgents: !!+canAddAgents });
     await sync.addLog(
       'admin',
-      `Supervisor "${supervisorName}" added "${name}" [cellphone: ${phoneNumber}] [role: ${role}] [company: ${department}].`,
+      `Supervisor "${supervisorName}" added "${name}" [email: ${email}] [role: ${role}] [company: ${department}].`,
       supervisorDepartment
     );
     return ResponseOK({ ok: 1 }, callback);

@@ -5,7 +5,7 @@ import * as HelperType from '../utils/helper.protected';
 const { TaskRouterClass, ResponseOK, ohNoCatch, SyncClass, isSupervisor } = <typeof HelperType>require(Runtime.getFunctions()['utils/helper'].path);
 
 type MyEvent = {
-  phoneNumber: string;
+  email: string;
   token: string;
 };
 
@@ -36,15 +36,15 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     const { SYNC_SERVICE_SID, SYNC_LIST_SID } = context;
     const sync = new SyncClass(twilioClient, SYNC_SERVICE_SID, SYNC_LIST_SID);
 
-    const { phoneNumber } = event;
+    const { email } = event;
 
     const { supervisorName, supervisorDepartment } = await isSupervisor(event, context, sync);
 
-    if (!phoneNumber) {
-      throw new Error('"phoneNumber" is empty');
+    if (!email) {
+      throw new Error('"email" is empty');
     }
 
-    const user = `user-${phoneNumber}`;
+    const user = `user-${email}`;
     const { name: agentName, role: roleAgent } = await sync.getUser(user);
 
     await deleteWorkerFromTaskrouter(twilioClient, user);
@@ -52,7 +52,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
 
     await sync.addLog(
       'admin',
-      `Supervisor "${supervisorName}" deleted "${agentName}" [cellphone: "${phoneNumber}"] [role "${roleAgent}"].`,
+      `Supervisor "${supervisorName}" deleted "${agentName}" [email: "${email}"] [role "${roleAgent}"].`,
       supervisorDepartment
     );
 

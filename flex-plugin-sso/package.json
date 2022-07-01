@@ -1,6 +1,6 @@
 {
   "name": "flex-plugin-sso",
-  "version": "0.0.2",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "start": "twilio flex:plugins:start",

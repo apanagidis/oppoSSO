@@ -1,0 +1,75 @@
+{
+    "Malaysia": 
+     [
+     "Malaysia",
+     "Philippines",
+     "Malaysia",
+     "Singapore",
+     "Australia",
+     "New Zealand",
+     "Hong Kong",
+     "Nepal",
+     "Sri Lanka"
+     ],
+     "Spain":["Spain","Portugal"],
+     "Turkey":
+     ["Turkey",
+     "Ukraine",
+     "Kazakhstan",
+     "Uzbekistan"],
+     "Slovakia":["Slovakia","Czech Republic","Hungary"],
+     "Romania":
+     [
+     "Romania",
+     "Moldova",
+     "Poland",
+     "United Kingdom",
+     "Ireland",
+     "Luxemburg",
+     "Netherlands",
+     "Belgium"],
+     "Egypt":[
+      "United Arab Emirates",
+      "Oman",
+      "Bahrain",
+      "Qatar",
+      "Kuwait",
+      "Saudi Arabia",
+      "Jordan",
+      "Iraq",
+      "Lebanon",
+      "Palestine",
+      "Syria",
+      "Egypt",
+      "Tunisia",
+      "South Africa",
+      "Nigeria"
+     ],
+     "Mexico":
+     [
+      "Mexico",
+      "Columbia",
+      "Peru",
+      "Chile",
+      "Costa Rica",
+      "Honduras"
+     ],
+     "Indonesia":["Indonesia"],
+     "Japan":["Japan"],
+     "Taiwan":["Taiwan"],
+     "Thailand":["Thailand"],
+     "Vietnam":["Vietnam"],
+     "Cambodia":["Cambodia"],
+     "Bengal":["Bengal"],
+     "Myanmar":["Myanmar"],
+     "Pakistan":["Pakistan"],
+     "Kenya":["Kenya"],
+      "Morocco":["Morocco"],
+      "Algeria ":["Algeria "],
+      "Germany":["Germany"],
+      "France":["France"],
+      "Switzerland":["Switzerland"],
+      "Italy":["Italy"],
+      "Russia":["Russia"]
+  
+  }

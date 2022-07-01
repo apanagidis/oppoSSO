@@ -5,7 +5,7 @@ import * as HelperType from '../utils/helper.protected';
 const { ohNoCatch, formatNumberToE164, SyncClass } = <typeof HelperType>require(Runtime.getFunctions()['utils/helper'].path);
 
 type MyEvent = {
-  phoneNumber: string;
+  email: string;
 };
 
 type MyContext = {
@@ -21,19 +21,18 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     const sync = new SyncClass(twilioClient, SYNC_SERVICE_SID, SYNC_LIST_SID);
 
     console.log('event:', event);
-    const { phoneNumber: notNormalizedMobile } = event;
-    const phoneNumber = formatNumberToE164(notNormalizedMobile);
+    const { email } = event;
 
     // Check if agent exists
-    const user = await sync.getUser(`user-${phoneNumber}`);
+    const user = await sync.getUser(`user-${email}`);
 
     // Send the Code
     const verification = await twilioClient.verify
       .services(VERIFY_SERVICE_SID)
-      .verifications.create({ to: phoneNumber, channel: 'sms', locale: 'en' });
+      .verifications.create({ to: email, channel: 'email', locale: 'en' });
 
     // Log
-    await sync.addLog('login', `"${user.name}" has received the SMS code and is trying to login...`, user.department);
+    await sync.addLog('login', `"${user.name}" has received the email code and is trying to login...`, user.department);
 
     return callback(null, { ok: 1 });
   } catch (e) {

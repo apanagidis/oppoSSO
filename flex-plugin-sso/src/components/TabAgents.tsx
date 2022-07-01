@@ -13,11 +13,11 @@ export const TabAgents = () => {
   const handleOpen = (): void => setIsOpen(true);
   const handleClose = (): void => setIsOpen(false);
   const handleRefreshTable = (): Promise<void> => fetchData();
-  const handleDeleteWorker = (phoneNumber: string): Promise<void> => deleteWorker(phoneNumber);
+  const handleDeleteWorker = (email: string): Promise<void> => deleteWorker(email);
 
-  const deleteWorker = async (phoneNumber: string) => {
+  const deleteWorker = async (email: string) => {
     setIsLoading(true);
-    await apiDeleteWorker(phoneNumber);
+    await apiDeleteWorker(email);
     setData(await apiListWorkers());
     setIsLoading(false);
   };

@@ -48,7 +48,7 @@
       <article class="grid">
         <div>
           <hgroup>
-            <h1 id="phoneNumberTitle">Your phone number:</h1>
+            <h1 id="emailTitle">Your email:</h1>
             <h1 id="codeTitle" style="display: none">Code:</h1>
             <h2></h2>
           </hgroup>
@@ -57,19 +57,19 @@
             <input type="hidden" id="RelayState" name="RelayState" value="" />
           </form>
           <form onsubmit="event.preventDefault(); submitt(event);">
-            <input type="tel" name="phoneNumber" id="phoneNumber" placeholder="+49111222333" aria-label="phonenumber" required />
+            <input type="tel" name="email" id="email" placeholder="abc@acme.com" aria-label="email" required />
             <input
               style="display: none"
               id="code"
               name="code"
-              placeholder="code received by SMS?"
+              placeholder="enter the code received via email?"
               maxlength="10"
               type="number"
               aria-required="true"
               value=""
               autocomplete="off"
             />
-            <button aria-busy="false" type="submit" id="button" class="contrast">Send me a short code</button>
+            <button aria-busy="false" type="submit" id="button" class="contrast">Send me a verification code</button>
             <small id="error" style="visibility: hidden"></small>
           </form>
         </div>
@@ -90,7 +90,7 @@
         throw new Error('abort');
       }
 
-      document.getElementById('phoneNumber').value = localStorage.getItem('phoneNumber');
+      document.getElementById('email').value = localStorage.getItem('email');
 
       let step = 1;
 
@@ -118,8 +118,8 @@
 
       const sendCode = async () => {
         try {
-          const phoneNumber = document.getElementById('phoneNumber').value;
-          localStorage.setItem('phoneNumber', phoneNumber);
+          const email = document.getElementById('email').value;
+          localStorage.setItem('email', email);
 
           const rawResponse = await fetch('https://{DOMAIN_NAME}/login/step1-sendcode', {
             method: 'POST',
@@ -127,7 +127,7 @@
               Accept: 'application/json',
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ phoneNumber }),
+            body: JSON.stringify({ email }),
           });
 
           const { ok, error } = await rawResponse.json();
@@ -139,8 +139,8 @@
 
           display('code', '');
           display('codeTitle', '');
-          display('phoneNumber', 'none');
-          display('phoneNumberTitle', 'none');
+          display('email', 'none');
+          display('emailTitle', 'none');
           document.getElementById('button').innerText = 'Start Flex!';
           step = 2;
         } catch (e) {
@@ -150,7 +150,7 @@
 
       const validateCode = async () => {
         try {
-          const phoneNumber = document.getElementById('phoneNumber').value;
+          const email = document.getElementById('email').value;
           const code = document.getElementById('code').value;
 
           const rawResponse = await fetch('https://{DOMAIN_NAME}/login/step2-validatecode', {
@@ -159,7 +159,7 @@
               Accept: 'application/json',
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ phoneNumber, code, idSSO, RelayState }),
+            body: JSON.stringify({ email, code, idSSO, RelayState }),
           });
 
           const { SAMLResponse, error } = await rawResponse.json();

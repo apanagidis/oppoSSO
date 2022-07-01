@@ -10,7 +10,7 @@ type MyEvent = {
   code: string;
   RelayState: string;
   idSSO: string;
-  phoneNumber: string;
+  email: string;
 };
 
 type MyContext = {
@@ -102,8 +102,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     const sync = new SyncClass(twilioClient, SYNC_SERVICE_SID, SYNC_LIST_SID);
 
     console.log('event:', event);
-    const { idSSO, code, RelayState, phoneNumber: notNormalizedMobile } = event;
-    const phoneNumber = formatNumberToE164(notNormalizedMobile);
+    const { idSSO, code, RelayState, email } = event;
 
     if (!idSSO || !RelayState) {
       throw new Error('idSSO or RelayState are null. How come?');
@@ -112,7 +111,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     //
     // Get Agent
     //
-    const { name, role, department, canAddAgents } = await sync.getUser(`user-${phoneNumber}`);
+    const { name, role, department, canAddAgents } = await sync.getUser(`user-${email}`);
 
     //
     // Validate Code
@@ -121,7 +120,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
       throw new Error('no donuts for you - invalid code.');
     }
 
-    const { status } = await twilioClient.verify.services(VERIFY_SERVICE_SID).verificationChecks.create({ to: phoneNumber, code });
+    const { status } = await twilioClient.verify.services(VERIFY_SERVICE_SID).verificationChecks.create({ to: email, code });
     if (status === 'canceled') {
       throw new Error('It seems your session has expired. Please refresh the page and start all over again.');
     }
@@ -132,7 +131,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     //
     // SAML logic
     //
-    const user = { friendlyName: `user-${phoneNumber}`, email: `invalid${phoneNumber}@twilio.com`, idSSO, name, department, role, canAddAgents };
+    const user = { friendlyName: `user-${email}`, email: `invalid${email}@twilio.com`, idSSO, name, department, role, canAddAgents };
     const binding = Constants.namespace.binding;
 
     const { context: SAMLResponse } = await idp.createLoginResponse(

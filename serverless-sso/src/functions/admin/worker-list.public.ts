@@ -25,7 +25,18 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     const { supervisorDepartment } = await isSupervisor(event, context, sync);
 
     const usersAll = await sync.listDocuments();
-    const users = usersAll.filter((user) => supervisorDepartment === 'internal' || supervisorDepartment === user.data.department);
+    const sitesCompanies = JSON.parse(Runtime.getAssets()['/sites.json'].open());
+
+    let found: string;
+    const keys = Object.keys(sitesCompanies);
+    keys.forEach(key  => {
+        let temp = sitesCompanies[key].find((element: string)=> {return element===supervisorDepartment})
+        if(temp){
+            found = key;
+        }      
+    });
+
+   const users = usersAll.filter((user) => supervisorDepartment === 'internal' || sitesCompanies[found].includes(user.data.department));
 
     return ResponseOK({ users }, callback);
   } catch (e) {
