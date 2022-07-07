@@ -44,13 +44,15 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
 
     // For security reasons, avoiding an Supervisor from BPO elevating his accesses
     const newWorkerDepartment = supervisorDepartment === 'internal' ? department : supervisorDepartment;
-
-    await sync.createDocument(`user-${email}`, { name, email, role, department: newWorkerDepartment, canAddAgents: !!+canAddAgents });
-    await sync.addLog(
-      'admin',
-      `Supervisor "${supervisorName}" added "${name}" [email: ${email}] [role: ${role}] [company: ${department}].`,
-      supervisorDepartment
-    );
+   
+      await sync.createDocument(`user-${email}`, { name, email, role, department: newWorkerDepartment, canAddAgents: !!+canAddAgents });
+      await sync.addLog(
+        'admin',
+        `Supervisor "${supervisorName}" added "${name}" [email: ${email}] [role: ${role}] [company: ${department}].`,
+        supervisorDepartment
+      );
+      
+  
     return ResponseOK({ ok: 1 }, callback);
   } catch (e) {
     ohNoCatch(e, callback);
