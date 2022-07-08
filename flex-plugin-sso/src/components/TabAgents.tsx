@@ -4,10 +4,12 @@ import React, { StrictMode, useEffect } from 'react';
 import { GridAgents } from './GridAgents';
 import { Button, Spinner } from '@twilio-paste/core';
 import { NewWorker } from './NewWorker';
-import { apiDeleteWorker, apiListWorkers } from '../helpers/apis';
+import { apiDeleteWorker,apiListSiteCountries, apiListWorkers } from '../helpers/apis';
 
 export const TabAgents = () => {
   const [data, setData] = React.useState() as any;
+  const [dataCountries, setDataCountries] = React.useState() as any;
+
   const [isLoading, setIsLoading] = React.useState(true);
   const [isOpen, setIsOpen] = React.useState(false);
   const handleOpen = (): void => setIsOpen(true);
@@ -25,6 +27,7 @@ export const TabAgents = () => {
   const fetchData = async () => {
     setIsLoading(true);
     setData(await apiListWorkers());
+    setDataCountries(await apiListSiteCountries())
     setIsLoading(false);
   };
 
@@ -51,7 +54,7 @@ export const TabAgents = () => {
           </Button>
         </Box>
         <Box margin="space40" height="80vh" overflowY="auto">
-          <GridAgents data={data} handleDeleteWorker={handleDeleteWorker} />
+          <GridAgents data={data} dataCountries={dataCountries} handleDeleteWorker={handleDeleteWorker} />
         </Box>
         <NewWorker isOpen={isOpen} handleClose={handleClose} refreshTable={handleRefreshTable} />
       </Theme.Provider>

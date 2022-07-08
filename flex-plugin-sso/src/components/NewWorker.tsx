@@ -1,12 +1,12 @@
-import React from 'react';
+import React , { useEffect }from 'react';
 import { Button, Checkbox, HelpText, Input, Label } from '@twilio-paste/core';
 import { Box } from '@twilio-paste/core/box';
 import { ModalDialogPrimitiveOverlay, ModalDialogPrimitiveContent } from '@twilio-paste/modal-dialog-primitive';
 import { styled } from '@twilio-paste/styling-library';
 import { Select, Option } from '@twilio-paste/core/select';
-import { apiSaveWorker } from '../helpers/apis';
+import { apiSaveWorker,apiListSiteCountries } from '../helpers/apis';
 import { Manager } from '@twilio/flex-ui';
-import { companies, hasManyCompanies } from '../helpers/config';
+import { getCompaniesFromSitesCompanies, hasManyCompanies } from '../helpers/config';
 
 interface BasicModalDialogProps {
   isOpen: boolean;
@@ -46,6 +46,8 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
   const [role, setRole] = React.useState('agent');
   const [canAddAgents, setCanAddAgents] = React.useState(false);
   const [isSupervisor, setSupervisor] = React.useState(false);
+  const [companiesData, setCompanies] = React.useState({});
+
 
   const onClick = async () => {
     setIsLoading(true);
@@ -54,6 +56,18 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
     refreshTable();
     handleClose();
   };
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      let fetchedData = await apiListSiteCountries()
+      setCompanies(getCompaniesFromSitesCompanies(fetchedData))
+      setIsLoading(false);
+    };
+    fetchData();
+  }, []);
 
   const onChangeDepartment = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setDepartment(e.target.value);
@@ -102,9 +116,8 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
             <Box marginTop="space80">
               <Label htmlFor="departmentName">From which country does this person belong?</Label>
               <Select id="departmentName" onChange={onChangeDepartment}>
-                {/* <Option value="internal">Internal employee</Option> */}
-                {Object.entries(companies).map(([id, name]) => {
-                  return <Option value={id}>{name}</Option>;
+                {Object.entries((companiesData)).map(([id, name]) => {
+                  return <Option value={id}> {name}</Option>;
                 })}
               </Select>
             </Box>

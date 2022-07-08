@@ -2,16 +2,19 @@ import { Box } from '@twilio-paste/core/box';
 import { Theme } from '@twilio-paste/core/theme';
 import React, { StrictMode, useEffect } from 'react';
 import { GridAuditlogs } from './GridAuditlogs';
-import { apiListAuditLogs } from '../helpers/apis';
+import { apiListAuditLogs, apiListSiteCountries} from '../helpers/apis';
 import { Spinner } from '@twilio-paste/core';
 
 export const TabAuditlogs = () => {
   const [data, setData] = React.useState() as any;
   const [isLoading, setIsLoading] = React.useState(true);
+  const [dataCountries, setDataCountries] = React.useState() as any;
+
 
   const fetchData = async () => {
     setIsLoading(true);
     setData(await apiListAuditLogs());
+    setDataCountries(await apiListSiteCountries())
     setIsLoading(false);
   };
 
@@ -33,7 +36,7 @@ export const TabAuditlogs = () => {
     <StrictMode>
       <Theme.Provider theme="default">
         <Box margin="space40" height="85vh" overflowY="auto">
-          <GridAuditlogs data={data} />
+          <GridAuditlogs data={data} dataCountries={dataCountries}/>
         </Box>
       </Theme.Provider>
     </StrictMode>

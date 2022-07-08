@@ -1,23 +1,23 @@
 import * as Flex from '@twilio/flex-ui';
-import { companies, sitesCompanies, hasManyCompanies } from './config';
+import { getCompaniesFromSitesCompanies, hasManyCompanies } from './config';
 
-export const getCompanyName = (id: string) => {
+export const getCompanyName = (id: string, siteCompanies : any) => {
   if (id === 'internal') {
     return 'Internal';
   }
 
-  if (companies[id]) {
-    return companies[id];
+  if (getCompaniesFromSitesCompanies(siteCompanies)[id]) {
+    return getCompaniesFromSitesCompanies(siteCompanies)[id];
   }
 
   return '';
 };
 
-export const getSiteLocation = (id: string) => {
+export const getSiteLocation = (id: string, siteCompanies : any) => {
   let found;
-  const keys = Object.keys(sitesCompanies);
+  const keys = Object.keys(siteCompanies);
   keys.forEach(key => {
-      let temp = sitesCompanies[key].find((element: string)=> {return element===id})
+      let temp = siteCompanies[key].find((element: string)=> {return element===id})
       if(temp){
           found = key;
       }      

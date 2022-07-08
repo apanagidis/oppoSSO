@@ -23,6 +23,11 @@ interface ListWorkers {
   }[];
 }
 
+export interface SiteCountries {
+  siteCountries: {
+  };
+}
+
 interface ListAuditLogs {
   auditLogs: AuditLog[];
 }
@@ -31,6 +36,17 @@ export const apiListWorkers = async () => {
   try {
     const { users } = <ListWorkers>await request('/admin/worker-list');
     return users.map(({ data }) => data);
+  } catch (e: any) {
+    Flex.Notifications.showNotification('ssoError', { msg: e.message });
+    return [];
+  }
+};
+
+export const apiListSiteCountries = async () => {
+  try {
+    const { siteCountries } = <SiteCountries>await request('/admin/site-countries-list');
+    console.log(siteCountries)
+    return siteCountries;
   } catch (e: any) {
     Flex.Notifications.showNotification('ssoError', { msg: e.message });
     return [];

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Box } from '@twilio-paste/core/box';
-import { Menu, useMenuState, MenuButton, MenuItem } from '@twilio-paste/core/menu';
+import { SiteCountries } from '../helpers/apis';
 import { MoreIcon } from '@twilio-paste/icons/esm/MoreIcon';
 import { DataGrid, DataGridHead, DataGridRow, DataGridHeader, DataGridBody, DataGridCell } from '@twilio-paste/core/data-grid';
 import { AuditLog } from '../helpers/apis';
@@ -9,9 +8,10 @@ import { getCompanyName } from '../helpers/helpers';
 
 interface GridProps {
   data: AuditLog[];
+  dataCountries: SiteCountries;
 }
 
-export const GridAuditlogs: React.FC<GridProps> = ({ data }) => {
+export const GridAuditlogs: React.FC<GridProps> = ({ data,dataCountries }) => {
   /* eslint-disable react/no-array-index-key */
   return (
     <DataGrid aria-label="User list" data-testid="data-grid">
@@ -27,7 +27,7 @@ export const GridAuditlogs: React.FC<GridProps> = ({ data }) => {
         {data.map((row, rowIndex) => (
           <DataGridRow key={`row-${rowIndex}`}>
             <DataGridCell key={`col1-${row.index}`}>{row.timeAgo}</DataGridCell>
-            {hasManyCompanies ? <DataGridCell key={`col2-${row.index}`}>{getCompanyName(row.department)}</DataGridCell> : null}
+            {hasManyCompanies ? <DataGridCell key={`col2-${row.index}`}>{getCompanyName(row.department,dataCountries)}</DataGridCell> : null}
             <DataGridCell key={`col2-${row.index}`}>{row.section}</DataGridCell>
             <DataGridCell key={`col3-${row.index}`}>{row.msg}</DataGridCell>
           </DataGridRow>
