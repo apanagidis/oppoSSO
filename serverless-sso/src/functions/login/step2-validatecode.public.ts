@@ -71,7 +71,8 @@ export const createTemplateCallback = (ACCOUNT_SID: string, idp: any, _sp: any, 
     AGENT_NAME: user.name,
     AGENT_EMAIL: user.email,
     AGENT_ROLE: user.role,
-    DEPARTMENT: user.department,
+    COUNTRY: user.country,
+    SITE: user.site,
     Issuer: idp.entityMeta.getEntityID(),
     IssueInstant: now.toISOString(),
     ConditionsNotBefore: fiveMinutesAgo.toISOString(),
@@ -111,13 +112,13 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     //
     // Get Agent
     //
-    const { name, role, department, canAddAgents } = await sync.getUser(`user-${email}`);
+    const { name, role, country,site, canAddAgents } = await sync.getUser(`user-${email}`);
 
     //
     // Validate Code
     //
     if (!code || code.length !== 6) {
-      throw new Error('no donuts for you - invalid code.');
+      throw new Error('invalid code.');
     }
 
     const { status } = await twilioClient.verify.services(VERIFY_SERVICE_SID).verificationChecks.create({ to: email, code });
@@ -131,7 +132,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     //
     // SAML logic
     //
-    const user = { friendlyName: `user-${email}`, email: `invalid${email}@twilio.com`, idSSO, name, department, role, canAddAgents };
+    const user = { friendlyName: `user-${email}`, email: `invalid${email}@twilio.com`, idSSO, name, country,site, role, canAddAgents };
     const binding = Constants.namespace.binding;
 
     const { context: SAMLResponse } = await idp.createLoginResponse(
@@ -147,7 +148,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     //
     // Log
     //
-    await sync.addLog('login', `"${user.name}" logged in.`, user.department);
+    await sync.addLog('login', `"${user.name}" logged in.`, user.country);
 
     return callback(null, { SAMLResponse });
   } catch (e) {

@@ -25,12 +25,12 @@ export default class FlexSsoPlugin extends FlexPlugin {
   };
 
   private applyTeamViewFilters = (flex: typeof Flex, manager: Flex.Manager) => {
-    const { department_name } = manager.workerClient.attributes;
+    const { country } = manager.workerClient.attributes;
 
     if (isWorkerInternal(flex, manager)) {
       return;
     }
-    flex.TeamsView.defaultProps.hiddenFilter = `data.attributes.department_name == "${department_name}"`;
+    flex.TeamsView.defaultProps.hiddenFilter = `data.attributes.country == "${country}"`;
   };
 
   private registerAlerts(flex: typeof Flex, manager: Flex.Manager) {

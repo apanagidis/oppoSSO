@@ -29,14 +29,14 @@ export const getSiteLocation = (id: string, siteCompanies : any) => {
 export const isWorkerInternal = (flex: typeof Flex, manager: Flex.Manager) => {
   // if "no bpo concept", if "admin role" or "supervisor role but internal", then no filter is applied
   const { attributes } = manager.workerClient;
-  const { department_name, roles } = attributes;
-  if (!hasManyCompanies || roles.includes('admin') || department_name === 'internal') {
+  const { country, roles } = attributes;
+  if (!hasManyCompanies || roles.includes('admin') || country === 'internal') {
     return true;
   }
 
-  // if department name is null when role = supervisor, something is wrong
-  if (!department_name) {
-    throw new Error('SSO Plugin: Ops, something is wrong. This Worker has no attribute "department_name". How come?!');
+  // if country name is null when role = supervisor, something is wrong
+  if (!country) {
+    throw new Error('SSO Plugin: Ops, something is wrong. This Worker has no attribute "country". How come?!');
   }
 
   return false;

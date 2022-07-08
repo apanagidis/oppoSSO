@@ -35,9 +35,9 @@ const StyledModalDialogContent = styled(ModalDialogPrimitiveContent)({
 });
 
 export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose, refreshTable }) => {
-  const { department_name } = Manager.getInstance().workerClient.attributes;
-  const supervisorDepartment = department_name || 'internal';
-  const [department, setDepartment] = React.useState(supervisorDepartment);
+  const  country_name = Manager.getInstance().workerClient.attributes.country;
+  const supervisorCountry = country_name || 'internal';
+  const [country, setCountry] = React.useState(supervisorCountry);
 
   const inputRef = React.useRef() as any;
   const [isLoading, setIsLoading] = React.useState(false);
@@ -51,7 +51,7 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
 
   const onClick = async () => {
     setIsLoading(true);
-    await apiSaveWorker(name, email, role, department, canAddAgents);
+    await apiSaveWorker(name, email, role, country, canAddAgents);
     setIsLoading(false);
     refreshTable();
     handleClose();
@@ -69,8 +69,8 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
     fetchData();
   }, []);
 
-  const onChangeDepartment = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setDepartment(e.target.value);
+  const onChangeCountry = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCountry(e.target.value);
   };
 
   const onChangeRole = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -112,10 +112,10 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
               }}
             />
           </Box>
-          {supervisorDepartment === 'internal' && hasManyCompanies ? (
+          {supervisorCountry === 'internal' && hasManyCompanies ? (
             <Box marginTop="space80">
-              <Label htmlFor="departmentName">From which country does this person belong?</Label>
-              <Select id="departmentName" onChange={onChangeDepartment}>
+              <Label htmlFor="countryName">From which country does this person belong?</Label>
+              <Select id="countryName" onChange={onChangeCountry}>
                 {Object.entries((companiesData)).map(([id, name]) => {
                   return <Option value={id}> {name}</Option>;
                 })}

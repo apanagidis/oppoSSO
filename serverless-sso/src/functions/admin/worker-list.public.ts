@@ -22,7 +22,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     const { SYNC_SERVICE_SID } = context;
     const sync = new SyncClass(twilioClient, SYNC_SERVICE_SID);
 
-    const { supervisorDepartment } = await isSupervisor(event, context, sync);
+    const { supervisorCountry } = await isSupervisor(event, context, sync);
 
     const usersAll = await sync.listDocuments();
     const sitesCompanies = JSON.parse(Runtime.getAssets()['/sites.json'].open());
@@ -30,13 +30,13 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     let found: string;
     const keys = Object.keys(sitesCompanies);
     keys.forEach(key  => {
-        let temp = sitesCompanies[key].find((element: string)=> {return element===supervisorDepartment})
+        let temp = sitesCompanies[key].find((element: string)=> {return element===supervisorCountry})
         if(temp){
             found = key;
         }      
     });
 
-   const users = usersAll.filter((user) => supervisorDepartment === 'internal' || sitesCompanies[found].includes(user.data.department));
+   const users = usersAll.filter((user) => supervisorCountry === 'internal' || sitesCompanies[found].includes(user.data.country));
 
     return ResponseOK({ users }, callback);
   } catch (e) {

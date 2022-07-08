@@ -207,8 +207,8 @@ export const GridAgents: React.FC<GridProps> = ({data,dataCountries,handleDelete
               return (
                 <DataGridRow key={`row-${rowIndex}`}>
                   <DataGridCell key={`col1-${row.email}`}>{row.name}</DataGridCell>
-                  {hasManyCompanies ? <DataGridCell key={`col1-${row.email}`}>{getSiteLocation(row.department,dataCountries)}</DataGridCell> : null}
-                  {hasManyCompanies ? <DataGridCell key={`col1-${row.email}`}>{getCompanyName(row.department,dataCountries)}</DataGridCell> : null}
+                  {hasManyCompanies ? <DataGridCell key={`col1-${row.email}`}>{getSiteLocation(row.country,dataCountries)}</DataGridCell> : null}
+                  {hasManyCompanies ? <DataGridCell key={`col1-${row.email}`}>{getCompanyName(row.country,dataCountries)}</DataGridCell> : null}
                   <DataGridCell key={`col2-${row.email}`}>{row.email}</DataGridCell>
                   <DataGridCell key={`col3-${row.email}`}>{row.role}</DataGridCell>
                   <DataGridCell key={`col4-${row.email}`}>{row.canAddAgents ? 'Yes' : 'No'}</DataGridCell>

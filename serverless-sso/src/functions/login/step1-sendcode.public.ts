@@ -32,7 +32,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
       .verifications.create({ to: email, channel: 'email', locale: 'en' });
 
     // Log
-    await sync.addLog('login', `"${user.name}" has received the email code and is trying to login...`, user.department);
+    await sync.addLog('login', `"${user.name}" has received the email code and is trying to login...`, user.country);
 
     return callback(null, { ok: 1 });
   } catch (e) {

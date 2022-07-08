@@ -3,14 +3,14 @@ import { Manager } from '@twilio/flex-ui';
 
 export interface AuditLog {
   index: number;
-  department: string;
+  country: string;
   section: string;
   timeAgo: string;
   msg: string;
 }
 export interface Worker {
   name: string;
-  department: string;
+  country: string;
   email: string;
   role: string;
   canAddAgents: boolean;
@@ -63,9 +63,9 @@ export const apiListAuditLogs = async () => {
   }
 };
 
-export const apiSaveWorker = async (name: string, email: string, role: string, department: string, canAddAgents: boolean) => {
+export const apiSaveWorker = async (name: string, email: string, role: string, country: string, canAddAgents: boolean) => {
   try {
-    await request('/admin/worker-add', { name, email, role, department, canAddAgents: +canAddAgents });
+    await request('/admin/worker-add', { name, email, role, country, canAddAgents: +canAddAgents });
     Flex.Notifications.showNotification('ssoOK', { msg: `Agent ${name} was added.` });
   } catch (e: any) {
     Flex.Notifications.showNotification('ssoError', { msg: e.message });

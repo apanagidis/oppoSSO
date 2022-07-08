@@ -22,11 +22,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     const twilioClient = context.getTwilioClient();
     const { SYNC_SERVICE_SID, SYNC_LIST_SID } = context;
     const sync = new SyncClass(twilioClient, SYNC_SERVICE_SID, SYNC_LIST_SID);
-
     const siteCountries = JSON.parse(Runtime.getAssets()['/sites.json'].open());
-
-    console.log("sites Companies ",siteCountries )
-
     return ResponseOK({ siteCountries }, callback);
   } catch (e) {
     ohNoCatch(e, callback);

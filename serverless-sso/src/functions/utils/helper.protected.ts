@@ -10,7 +10,8 @@ interface User {
   name: string;
   role: string;
   canAddAgents: boolean;
-  department: string;
+  country: string;
+  site: string;
 }
 
 export const MIN = 1000 * 60;
@@ -78,6 +79,19 @@ export const myRequire = (file: string) => {
   }
 };
 
+export const countryToSite = (country: string) => {
+  const siteCountries = JSON.parse(assets['/sites.json'].open().trim());
+  let site;
+  const keys = Object.keys(siteCountries);
+  keys.forEach(key  => {
+      let temp = siteCountries[key].find((element:any)=> {return element===country})
+      if(temp){
+          site = key;
+      }      
+  });
+  return site;
+};
+
 
 export class SyncClass {
   constructor(private twilioClient: TwilioInterface, private serviceSid: string, private syncListSid?: string) {}
@@ -135,12 +149,12 @@ export class SyncClass {
   async getUser(user: string): Promise<User> {
     try {
       const {
-        data: { name, department, role, canAddAgents },
+        data: { name, country, site, role, canAddAgents },
       } = await this.fetchDocument(user);
       if (!name || !role) {
         throw new Error('Bug: Name of the agent or its role wasnt found.');
       }
-      return { name, department, role, canAddAgents };
+      return { name, country, site, role, canAddAgents };
     } catch (e) {
       if (e.status === 404) {
         throw new Error('Agent not found using this email.');
@@ -153,13 +167,13 @@ export class SyncClass {
   // Sync List Methods
   //
   // section: "admin" or "login"
-  async addLog(section: string, msg: string, department: string) {
+  async addLog(section: string, msg: string, country: string) {
     if (!this.syncListSid) {
       throw new Error('syncListSid wasnt initialized correctly.');
     }
 
     const data = {
-      department,
+      country,
       section,
       msg,
     };
@@ -167,7 +181,7 @@ export class SyncClass {
     return this.twilioClient.sync.services(this.serviceSid).syncLists(this.syncListSid).syncListItems.create({ data });
   }
 
-  async listLogs(filterByDepartment: string) {
+  async listLogs(filterByCountry: string) {
     if (!this.syncListSid) {
       throw new Error('syncListSid wasnt initialized correctly.');
     }
@@ -178,10 +192,10 @@ export class SyncClass {
       .syncListItems.list({ order: 'desc', pageSize: 200, limit: 1000 });
 
     return logs
-      .map(({ index, dateCreated, data: { msg, section, department } }) => {
-        return { index, section, timeAgo: format(dateCreated), msg, department };
+      .map(({ index, dateCreated, data: { msg, section, country } }) => {
+        return { index, section, timeAgo: format(dateCreated), msg, country };
       })
-      .filter(({ department }) => filterByDepartment === 'internal' || filterByDepartment === department);
+      .filter(({ country }) => filterByCountry === 'internal' || filterByCountry === country);
   }
 }
 
@@ -197,7 +211,7 @@ type MyContext = {
 export const isSupervisor = async (event: MyEvent, context: MyContext, sync: SyncClass) => {
   const { roles, valid, realm_user_id: user, identity } = <any>await validator(event.token, context.ACCOUNT_SID, context.AUTH_TOKEN);
   let supervisorName = identity; // when Admin role
-  let supervisorDepartment = 'internal';
+  let supervisorCountry= 'internal';
 
   if (!valid) {
     throw new Error('Token not valid.');
@@ -214,19 +228,19 @@ export const isSupervisor = async (event: MyEvent, context: MyContext, sync: Syn
       throw new Error('Strange, this supervisor does not have a valid realm_user_id.');
     }
 
-    const { canAddAgents, name, department } = await sync.getUser(user);
+    const { canAddAgents, name, country } = await sync.getUser(user);
     supervisorName = name; //when Supervisor role
-    supervisorDepartment = department;
+    supervisorCountry = country;
     if (!canAddAgents) {
       throw new Error('This supervisor cannot manage (add/del/list) agents.');
     }
 
-    if (!supervisorDepartment) {
-      throw new Error('This supervisor for some buggy-reason does not have an department configured. Undefined department may be insecure.');
+    if (!supervisorCountry) {
+      throw new Error('This supervisor for some buggy-reason does not have an country configured. Undefined country may be insecure.');
     }
   }
 
-  return { supervisorName, supervisorDepartment };
+  return { supervisorName, supervisorCountry };
 };
 
 export const ohNoCatch = (e: any, callback: ServerlessCallback) => {

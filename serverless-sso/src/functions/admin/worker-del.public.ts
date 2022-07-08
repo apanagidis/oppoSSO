@@ -38,7 +38,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
 
     const { email } = event;
 
-    const { supervisorName, supervisorDepartment } = await isSupervisor(event, context, sync);
+    const { supervisorName, supervisorCountry } = await isSupervisor(event, context, sync);
 
     if (!email) {
       throw new Error('"email" is empty');
@@ -53,7 +53,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     await sync.addLog(
       'admin',
       `Supervisor "${supervisorName}" deleted "${agentName}" [email: "${email}"] [role "${roleAgent}"].`,
-      supervisorDepartment
+      supervisorCountry
     );
 
     return ResponseOK({ ok: 1 }, callback);

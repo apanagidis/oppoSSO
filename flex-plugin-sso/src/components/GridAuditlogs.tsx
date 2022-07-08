@@ -27,7 +27,7 @@ export const GridAuditlogs: React.FC<GridProps> = ({ data,dataCountries }) => {
         {data.map((row, rowIndex) => (
           <DataGridRow key={`row-${rowIndex}`}>
             <DataGridCell key={`col1-${row.index}`}>{row.timeAgo}</DataGridCell>
-            {hasManyCompanies ? <DataGridCell key={`col2-${row.index}`}>{getCompanyName(row.department,dataCountries)}</DataGridCell> : null}
+            {hasManyCompanies ? <DataGridCell key={`col2-${row.index}`}>{getCompanyName(row.country,dataCountries)}</DataGridCell> : null}
             <DataGridCell key={`col2-${row.index}`}>{row.section}</DataGridCell>
             <DataGridCell key={`col3-${row.index}`}>{row.msg}</DataGridCell>
           </DataGridRow>
