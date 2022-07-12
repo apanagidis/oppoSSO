@@ -84,7 +84,7 @@ export const countryToSite = (country: string) => {
   let site;
   const keys = Object.keys(siteCountries);
   keys.forEach(key  => {
-      let temp = siteCountries[key].find((element:any)=> {return element===country})
+      let temp = siteCountries[key].find((element:any)=> {return element.toLowerCase().replace(/\s/g, '')===country.toLowerCase().replace(/\s/g, '')})
       if(temp){
           site = key;
       }      

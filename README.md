@@ -48,6 +48,9 @@ We have to install 2 assets:
 - The Twilio Functions (back-end)
 - The Flex Plugin (front-end)
 
+#### List of sites/countries:
+The list of sites/countries is stored as an asset in `./serverless-sso/src/assets/sites.private.json`. Please keep the format of the file the same and only add/remove/edit sites and countries as needed. Once the `sites.private.json` has been updated, it has to be redeployed using the instructions in the following section "To install the Twilio Functions"
+
 #### To install the Twilio Functions:
 
 1. clone this repo;
@@ -94,8 +97,4 @@ We have to install 2 assets:
 8. Once **step 8** is finished, it will show the next steps, you will have to run the command mentioned there (something like `twilio flex:plugins:release ... etc etc`)
 9. We are done! Go to https://flex.twilio.com - You should see a new icon on the left-hand side. From there you can add/remove your Agents and ask them to visit the link mentioned on **step 10** to log in on Flex.
 
-## Roadmap
 
-- **[Feature]** multi-BPOs concept: in RealTime Queue Dashboard, add the possibility to filter out only the queues from the BPO... Hiding the queues from others.
-
-- **[Feature]** multi-BPOs concept: in the Flex Insights, add the possibility to have reports of their own BPO, using custom embedded dashboards.
