@@ -45,7 +45,6 @@ export const apiListWorkers = async () => {
 export const apiListSiteCountries = async () => {
   try {
     const { siteCountries } = <SiteCountries>await request('/admin/site-countries-list');
-    console.log(siteCountries)
     return siteCountries;
   } catch (e: any) {
     Flex.Notifications.showNotification('ssoError', { msg: e.message });

@@ -212,6 +212,7 @@ export const isSupervisor = async (event: MyEvent, context: MyContext, sync: Syn
   const { roles, valid, realm_user_id: user, identity } = <any>await validator(event.token, context.ACCOUNT_SID, context.AUTH_TOKEN);
   let supervisorName = identity; // when Admin role
   let supervisorCountry= 'internal';
+  console.log("roles", roles, "valid", "realm_user_id")
 
   if (!valid) {
     throw new Error('Token not valid.');
@@ -229,6 +230,7 @@ export const isSupervisor = async (event: MyEvent, context: MyContext, sync: Syn
     }
 
     const { canAddAgents, name, country } = await sync.getUser(user);
+    console.log("Supervisor country",country)
     supervisorName = name; //when Supervisor role
     supervisorCountry = country;
     if (!canAddAgents) {

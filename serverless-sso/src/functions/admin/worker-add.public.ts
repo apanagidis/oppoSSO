@@ -2,7 +2,7 @@ import '@twilio-labs/serverless-runtime-types';
 import { ServerlessCallback, ServerlessFunctionSignature } from '@twilio-labs/serverless-runtime-types/types';
 import * as HelperType from '../utils/helper.protected';
 
-const { ResponseOK, formatNumberToE164, ohNoCatch, SyncClass, isSupervisor } = <typeof HelperType>(
+const { ResponseOK, ohNoCatch, SyncClass, isSupervisor,countryToSite } = <typeof HelperType>(
   require(Runtime.getFunctions()['utils/helper'].path)
 );
 
@@ -34,8 +34,8 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
 
     const { supervisorName, supervisorCountry } = await isSupervisor(event, context, sync);
 
-    if (!name || !email || !role) {
-      throw new Error("Some fields came empty. Please check in the Network tab of Chrome. I need 'name', 'email' and 'role'.");
+    if (!name || !email || !role || !country) {
+      throw new Error("Some fields came empty. Please check in the Network tab of Chrome. I need 'name', 'email', 'role' and 'country.");
     }
 
     if (role !== 'agent' && !role.startsWith('supervisor')) {
@@ -43,12 +43,12 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (c
     }
 
     // For security reasons, avoiding an Supervisor from BPO elevating his accesses
-    const newWorkerCountry = supervisorCountry === 'internal' ? country : supervisorCountry;
+    // const newWorkerCountry = supervisorCountry === 'internal' ? country : supervisorCountry;
    
-      await sync.createDocument(`user-${email}`, { name, email, role, country: newWorkerCountry, site:HelperType.countryToSite(newWorkerCountry), canAddAgents: !!+canAddAgents });
+      await sync.createDocument(`user-${email}`, { name, email, role, country: country, site: countryToSite(country), canAddAgents: !!+canAddAgents });
       await sync.addLog(
         'admin',
-        `Supervisor "${supervisorName}" added "${name}" [email: ${email}] [role: ${role}] [company: ${country}].`,
+        `Supervisor "${supervisorName}" added "${name}" [email: ${email}] [role: ${role}] [country: ${country}].`,
         supervisorCountry
       );
       

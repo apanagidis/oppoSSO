@@ -6,7 +6,8 @@ import { styled } from '@twilio-paste/styling-library';
 import { Select, Option } from '@twilio-paste/core/select';
 import { apiSaveWorker,apiListSiteCountries } from '../helpers/apis';
 import { Manager } from '@twilio/flex-ui';
-import { getCompaniesFromSitesCompanies, hasManyCompanies } from '../helpers/config';
+import {  hasManyCompanies } from '../helpers/config';
+import {FlatenCompanies,filterSiteCountryFromCountry} from '../helpers/helpers';
 
 interface BasicModalDialogProps {
   isOpen: boolean;
@@ -35,10 +36,7 @@ const StyledModalDialogContent = styled(ModalDialogPrimitiveContent)({
 });
 
 export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose, refreshTable }) => {
-  const  country_name = Manager.getInstance().workerClient.attributes.country;
-  const supervisorCountry = country_name || 'internal';
-  const [country, setCountry] = React.useState(supervisorCountry);
-
+  const [country, setCountry] = React.useState('');
   const inputRef = React.useRef() as any;
   const [isLoading, setIsLoading] = React.useState(false);
   const [name, setName] = React.useState('');
@@ -58,16 +56,19 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
   };
 
 
-
   useEffect(() => {
+    const  country_name = Manager.getInstance().workerClient.attributes.country;
+    const supervisorCountry = country_name || 'internal';
     const fetchData = async () => {
       setIsLoading(true);
-      let fetchedData = await apiListSiteCountries()
-      setCompanies(getCompaniesFromSitesCompanies(fetchedData))
+      let fetchedData = await apiListSiteCountries();
+      setCompanies(FlatenCompanies(FlatenCompanies(filterSiteCountryFromCountry(fetchedData,supervisorCountry))))
       setIsLoading(false);
     };
     fetchData();
   }, []);
+
+
 
   const onChangeCountry = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCountry(e.target.value);
@@ -112,10 +113,11 @@ export const NewWorker: React.FC<BasicModalDialogProps> = ({ isOpen, handleClose
               }}
             />
           </Box>
-          {supervisorCountry === 'internal' && hasManyCompanies ? (
+          {hasManyCompanies ? (
             <Box marginTop="space80">
               <Label htmlFor="countryName">From which country does this person belong?</Label>
               <Select id="countryName" onChange={onChangeCountry}>
+                <Option value="internal">Internal employee</Option>
                 {Object.entries((companiesData)).map(([id, name]) => {
                   return <Option value={id}> {name}</Option>;
                 })}

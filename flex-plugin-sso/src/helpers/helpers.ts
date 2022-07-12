@@ -1,13 +1,13 @@
 import * as Flex from '@twilio/flex-ui';
-import { getCompaniesFromSitesCompanies, hasManyCompanies } from './config';
+import { hasManyCompanies } from './config';
 
 export const getCompanyName = (id: string, siteCompanies : any) => {
   if (id === 'internal') {
     return 'Internal';
   }
 
-  if (getCompaniesFromSitesCompanies(siteCompanies)[id]) {
-    return getCompaniesFromSitesCompanies(siteCompanies)[id];
+  if (FlatenCompanies(siteCompanies)[id]) {
+    return FlatenCompanies(siteCompanies)[id];
   }
 
   return '';
@@ -56,3 +56,46 @@ export const isSupervisor = (manager: Flex.Manager) => {
 
   return false;
 };
+
+export function FlatenCompanies(sitesCompaniesD:Companies): Companies{
+  let flatCompanies:any = [];
+  let companies:Companies = {};
+  Object.keys(sitesCompaniesD).map(function(key, index) {
+    flatCompanies.push(sitesCompaniesD[key]);
+  });
+  flatCompanies = flatCompanies.flat()
+
+  flatCompanies.forEach((element: any) =>{
+    companies[element.replace(/\s/g, '')] = element;
+  });
+  return companies;
+}
+
+export function filterSiteCountryFromCountry(sitesCompanies:Companies,country:string): any{
+  if(country && country ==='internal'){
+    return sitesCompanies;
+  }
+  try {
+    let found;
+    Object.keys(sitesCompanies).map(function(key, index) {
+      for (let index = 0; index < sitesCompanies[key].length; index++) {
+        const element = sitesCompanies[key][index];
+        if(element && element.toLowerCase().replace(/\s/g, '') === country.toLowerCase().replace(/\s/g, '')){
+          found = key;
+        }
+      }
+    });
+    if(found){
+      return sitesCompanies[found];
+    }
+    return [];
+  } catch (error) {
+    console.log(error);
+    return sitesCompanies;
+  }
+}
+
+export interface Companies {
+  [key: string]: string;
+}
+
